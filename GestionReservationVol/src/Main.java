@@ -12,7 +12,8 @@ public class Main {
 					"root",
 					""
 			);
-				System.out.println("ok");
+			Scanner scanner = new Scanner(System.in);
+			Vol.ajouterVol(connection,scanner);
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
