@@ -13,7 +13,8 @@ public class Main {
 					""
 			);
 			Scanner scanner = new Scanner(System.in);
-			Vol.ajouterVol(connection,scanner);
+			//Vol.ajouterVol(connection,scanner);
+			Categorie.ajouteCategorie(connection,scanner);
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
