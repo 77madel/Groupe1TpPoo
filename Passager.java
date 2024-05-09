@@ -1,3 +1,9 @@
+import Personne;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import ConnectDB;
 public class Passager extends Personne {
     private int idPassager;
     private String dateNaissance;
@@ -12,7 +18,6 @@ public class Passager extends Personne {
         this.numeroTelephone = numeroTelephone;
     }
 
-    @Override
     public String getTypePersonne() {
         return "passager";
     }
@@ -30,5 +35,8 @@ public class Passager extends Personne {
         return numeroTelephone;
     }
 
-    // Autres méthodes si nécessaire
+    public void seConnecter() throws SQLException {
+        Connection connection = ConnectDB.getConnection();
+        System.out.println("Vous êtes connecter");
+    }
 }

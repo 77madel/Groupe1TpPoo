@@ -16,7 +16,6 @@ public abstract class Personne {
 
     // Méthode abstraite à implémenter dans les classes filles
     public abstract String getTypePersonne();
-    public abstract String seConnecter();
 
     // Getters et setters
     public int getID() {

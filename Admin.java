@@ -1,3 +1,4 @@
+import Personne;
 public class Admin extends Personne {
     private int adminID;
 
@@ -7,7 +8,6 @@ public class Admin extends Personne {
         this.adminID = adminID;
     }
 
-    @Override
     public String getTypePersonne() {
         return "admin";
     }
@@ -17,5 +17,7 @@ public class Admin extends Personne {
         return adminID;
     }
 
-    // Autres méthodes si nécessaire
+    public void seConnecter() {
+        System.out.println("Vous êtes connecter");
+    }
 }
