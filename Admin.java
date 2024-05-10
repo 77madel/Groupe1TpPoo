@@ -25,9 +25,9 @@ public class Admin extends Personne {
         String ajoutComp = "INSERT INTO Compagnie (nomCompagnie, nombreDAvion, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ConnectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(ajoutComp)) {
-            statement.setString(1, compagnie.getNom_compagnie());
-            statement.setString(2, compagnie.getNombreDAvion());
-            statement.setString(3, compagnie.getMotDePasse());
+            statement.setString(1, compagnie.getNom_comp());
+            statement.setInt(2, compagnie.getNbred_avion());
+            statement.setString(3, compagnie.getMdp());
             statement.setString(4, compagnie.getSiteWeb());
             statement.setInt(5, this.getIdAdmin()); // Utilise l'ID de l'admin courant
             statement.executeUpdate();
@@ -47,11 +47,11 @@ public class Admin extends Personne {
         String modifComp = "UPDATE Compagnie SET nomCompagnie = ?, nombreDAvion = ?, motDePasse = ?, siteWeb = ? WHERE idCompagnie = ?";
         try (Connection connection = ConnectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(modifComp)) {
-            statement.setString(1, compagnie.getNom_compagnie());
-            statement.setString(2, compagnie.getNombreDAvion());
-            statement.setString(3, compagnie.getMotDePasse());
+            statement.setString(1, compagnie.getNom_comp());
+            statement.setInt(2, compagnie.getNbred_avion());
+            statement.setString(3, compagnie.getMdp());
             statement.setString(4, compagnie.getSiteWeb());
-            statement.setInt(5, compagnie.getId_compagnie());
+            statement.setInt(5, compagnie.getId_comp());
             statement.executeUpdate();
         }
     }
