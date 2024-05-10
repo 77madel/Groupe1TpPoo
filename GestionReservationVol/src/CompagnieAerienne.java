@@ -1,4 +1,7 @@
 package Groupe1TpPoo.GestionReservationVol.src;
+import java.util.ArrayList;
+import java.util.List;
+// importation des classes Vol et Avion
 public class CompagnieAerienne{
     private int id_comp;
     private String nom_comp;
