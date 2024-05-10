@@ -1,6 +1,9 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Avion {
-    
-    import java.sql.*;
 
     private String nbreplace; 
     private String nom;
@@ -53,7 +56,7 @@ public class Avion {
     public void ajouterAvion() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("INSERT INTO Avion (nbreplace, nom, modele) VALUES (?, ?, ?)")) {
-            statement.setString(1, nbrePlace);
+            statement.setString(1, nbreplace);
             statement.setString(2, nom);
             statement.setString(3, modele);
             statement.executeUpdate();
@@ -67,7 +70,7 @@ public class Avion {
     public void modifierAvion(int immatriculation) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("UPDATE Avion SET nbreplace = ?, nom = ?, modele = ? WHERE immatriculation = ?")) {
-            statement.setString(1, nbrePlace);
+            statement.setString(1, nbreplace);
             statement.setString(2, nom);
             statement.setString(3, modele);
             statement.setInt(4, immatriculation);
