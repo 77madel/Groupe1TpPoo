@@ -1,3 +1,4 @@
+package Groupe1TpPoo.GestionReservationVol.src;
 public class CompagnieAerienne{
     private int id_comp;
     private String nom_comp;
@@ -63,5 +64,34 @@ public class CompagnieAerienne{
 
     public void setAdmin_id(int admin_id) {
         this.admin_id = admin_id;
+    }
+
+     // Méthodes pour gérer les vols
+     public void ajouterVol(Vol vol) {
+        vols.add(vol);
+    }
+
+    public void supprimerVol(Vol vol) {
+        vols.remove(vol);
+    }
+
+    public void modifierVol(Vol vol, String nouveauDepart, String nouvelleDestination, String nouvelleDate) {
+        vol.setDepart(nouveauDepart);
+        vol.setDestination(nouvelleDestination);
+        vol.setDate(nouvelleDate);
+    }
+
+    // Méthodes pour gérer les avions
+    public void ajouterAvion(Avion avion) {
+        avions.add(avion);
+    }
+
+    public void supprimerAvion(Avion avion) {
+        avions.remove(avion);
+    }
+
+    public void modifierAvion(Avion avion, String nouveauModele, int nouvelleCapacite) {
+        avion.setModele(nouveauModele);
+        avion.setCapacite(nouvelleCapacite);
     }
 }
