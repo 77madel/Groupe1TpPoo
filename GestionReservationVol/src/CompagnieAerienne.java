@@ -6,6 +6,8 @@ public class CompagnieAerienne{
     private String mdp;
     private String siteWeb;
     private int admin_id; // Clé étrangère vers la table Admin
+    private List<Vol> vols; // Liste des vols de la compagnie
+    private List<Avion> avions; // Liste des avions de la compagnie
 
     // Constructeur
     public CompagnieAerienne(int id_comp, String nom_comp, int nbred_avion, String mdp, String siteWeb, int admin_id) {
@@ -15,6 +17,8 @@ public class CompagnieAerienne{
         this.mdp = mdp;
         this.siteWeb = siteWeb;
         this.admin_id = admin_id;
+        this.vols = new ArrayList<>(); // Initialisation de la liste des vols
+        this.avions = new ArrayList<>(); // Initialisation de la liste des avions
     }
 
     // Getters et setters

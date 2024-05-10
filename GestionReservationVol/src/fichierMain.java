@@ -5,7 +5,7 @@ public class FichierMain {
         // Création d'une autre compagnie aérienne
         CompagnieAerienne compagnie2 = new CompagnieAerienne(2, "AirSenegal", 8, "mdp456", "www.airsenegal.com", 2);
 
-        // CréGroupe1TpPoo/GestionReservationVol/src/fichierMain.javad'un avion
+        // Création d'un avion
         Avion avion2 = new Avion("Airbus A330", 250);
 
         // Ajout de l'avion à la compagnie
