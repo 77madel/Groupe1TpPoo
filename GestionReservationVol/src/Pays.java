@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pays {
-    int id_pays;
+    int idPays;
     String nom;
     List<String> villes;  // Liste des villes associées au pays
 
     // Constructeur pour initialiser le pays avec un nom et un identifiant
-    public Pays(int id_pays, String nom) {
-        this.id_pays = id_pays;
+    public Pays(int idPays, String nom) {
+        this.idPays = idPays;
         this.nom = nom;
         this.villes = new ArrayList<>();  // Initialisation de la liste des villes
     }
