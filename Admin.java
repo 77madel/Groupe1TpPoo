@@ -1,41 +1,41 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class Admin extends Personne {
-    private int adminID;
+    private int idAdmin;
 
     // Constructeur
-    public Admin(int ID, String nom, String prenom, String email, String motDePasse, int adminID) {
-        super(ID, nom, prenom, email, motDePasse);
-        this.adminID = adminID;
+    public Admin(int idPersonne, String nom, String prenom, String email, String numeroDeTelephone, Date dateDeNaissance, String motDePasse, int idAdmin) {
+        super(idPersonne, nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse);
+        this.idAdmin = idAdmin;
     }
 
-    public String getTypePersonne() {
-        return "admin";
+    // Getter et Setter spécifique à Admin
+    public int getIdAdmin() {
+        return idAdmin;
     }
 
-    // Getter spécifique à l'admin
-    public int getAdminID() {
-        return adminID;
+    public void setIdAdmin(int idAdmin) {
+        this.idAdmin = idAdmin;
     }
 
     public void ajouterCompagnie(CompagnieAerienne compagnie) throws SQLException {
-        String ajoutComp = "INSERT INTO compagnie (ID_comp, nom_comp, nbre_d_avion, site_web, mot_de_passe, id_admin) VALUES (?, ?, ?, ?, ?, ?)";
+        String ajoutComp = "INSERT INTO Compagnie (nomCompagnie, nombreDAvion, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ConnectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(ajoutComp)) {
-            statement.setInt(1, compagnie.getId_comp());
-            statement.setString(2, compagnie.getNom_comp());
-            statement.setInt(3, compagnie.getNbred_avion());
+            statement.setString(1, compagnie.getNom_compagnie());
+            statement.setString(2, compagnie.getNombreDAvion());
+            statement.setString(3, compagnie.getMotDePasse());
             statement.setString(4, compagnie.getSiteWeb());
-            statement.setString(5, compagnie.getMdp());
-            statement.setInt(6, this.getAdminID()); // Utilise l'ID de l'admin courant
+            statement.setInt(5, this.getIdAdmin()); // Utilise l'ID de l'admin courant
             statement.executeUpdate();
         }
     }
 
     public void supprimerCompagnie(int idCompagnie) throws SQLException {
-        String supprComp = "DELETE FROM compagnie WHERE ID_comp = ?";
+        String supprComp = "DELETE FROM Compagnie WHERE idCompagnie = ?";
         try (Connection connection = ConnectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(supprComp)) {
             statement.setInt(1, idCompagnie);
@@ -44,14 +44,14 @@ public class Admin extends Personne {
     }
 
     public void modifierCompagnie(CompagnieAerienne compagnie) throws SQLException {
-        String modifComp = "UPDATE compagnie SET nom_comp = ?, nbre_d_avion = ?, site_web = ?, mot_de_passe = ? WHERE ID_comp = ?";
+        String modifComp = "UPDATE Compagnie SET nomCompagnie = ?, nombreDAvion = ?, motDePasse = ?, siteWeb = ? WHERE idCompagnie = ?";
         try (Connection connection = ConnectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(modifComp)) {
-            statement.setString(1, compagnie.getNom_comp());
-            statement.setInt(3, compagnie.getNbred_avion());
+            statement.setString(1, compagnie.getNom_compagnie());
+            statement.setString(2, compagnie.getNombreDAvion());
+            statement.setString(3, compagnie.getMotDePasse());
             statement.setString(4, compagnie.getSiteWeb());
-            statement.setString(5, compagnie.getMdp());
-            statement.setInt(5, compagnie.getId_comp());
+            statement.setInt(5, compagnie.getId_compagnie());
             statement.executeUpdate();
         }
     }
