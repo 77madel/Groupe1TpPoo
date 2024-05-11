@@ -131,4 +131,29 @@ public class Passager extends Personne {
             throw e; // Propagation de l'exception pour une gestion supérieure
         }
     }
+
+    public boolean seConnecter(String email, String motDePasse) {
+        String selectPassagerQuery = "SELECT idPersonne FROM Personne WHERE email = ? AND motDePasse = ?";
+        try (Connection connection = ConnectDB.getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectPassagerQuery)) {
+            // Paramètres pour la requête SELECT
+            statement.setString(1, email);
+            statement.setString(2, motDePasse);
+
+            // Exécution de la requête SELECT
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int idPersonne = resultSet.getInt("idPersonne");
+                    System.out.println("Vous êtes connecté en tant que passager (ID : " + idPersonne + ")");
+                    return true; // Connexion réussie
+                } else {
+                    System.out.println("Identifiants incorrects. Connexion échouée.");
+                    return false; // Connexion échouée (identifiants incorrects)
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la connexion : " + e.getMessage());
+            return false; // Connexion échouée en raison d'une exception SQL
+        }
+    }
 }

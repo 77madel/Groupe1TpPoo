@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class Admin extends Personne {
     public void setIdAdmin(int idAdmin) {
         this.idAdmin = idAdmin;
     }
+
 
     public void ajouterCompagnie(CompagnieAerienne compagnie) throws SQLException {
         String ajoutComp = "INSERT INTO Compagnie (nomCompagnie, nombreDAvion, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?, ?)";
@@ -53,6 +55,31 @@ public class Admin extends Personne {
             statement.setString(4, compagnie.getSiteWeb());
             statement.setInt(5, compagnie.getId_comp());
             statement.executeUpdate();
+        }
+    }
+
+    public boolean seConnecter(String email, String motDePasse) {
+        String selectAdminQuery = "SELECT idPersonne FROM Personne WHERE email = ? AND motDePasse = ?";
+        try (Connection connection = ConnectDB.getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectAdminQuery)) {
+            // Paramètres pour la requête SELECT
+            statement.setString(1, email);
+            statement.setString(2, motDePasse);
+
+            // Exécution de la requête SELECT
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int idPersonne = resultSet.getInt("idAdmin");
+                    System.out.println("Vous êtes connecté en tant qu'administrateur (ID : " + idPersonne + ")");
+                    return true; // Connexion réussie
+                } else {
+                    System.out.println("Identifiants incorrects. Connexion échouée.");
+                    return false; // Connexion échouée (identifiants incorrects)
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la connexion : " + e.getMessage());
+            return false; // Connexion échouée en raison d'une exception SQL
         }
     }
 }

@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Personne {
+public abstract class Personne {
     private int idPersonne;
     private String nom;
     private String prenom;
@@ -76,4 +76,6 @@ public class Personne {
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
     }
+
+    public abstract boolean seConnecter(String email, String motDePasse);
 }
