@@ -1,58 +1,36 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+<<<<<<< HEAD
+    import java.sql.Connection;
+    import java.sql.SQLException;
+    import java.util.Date;
+    import java.util.Scanner;
+    import java.sql.PreparedStatement;
 
 public class Avion {
 
-    private String nbreplace; 
+    private String capacite; 
     private String nom;
     private String modele;
 
-    // Constructeur
+        System.out.println("Veuillez donnee les informations de l'Avion : ");
 
-    public void Avion(String nbreplace, String nom, String modele){
-        this.nbreplace = nbreplace;
-        this.nom = nom;
-        this.modele = modele;
-    }
+        System.out.println("Nombre de place  : ");
+        String capacite = scanner.nextLine();
 
-        // Getter et Setter de Modele
+        System.out.println("Nom : ");
+        int nom = scanner.nextInt();
 
-    public String getModele(){
-        return modele;
-    }
-    public void getModele(String modele){
-        this.modele = modele;
-    }
+        System.out.println("Modele : ");
+        int modele = scanner.nextInt();
 
-        // Getter et Setter de Vol
 
-    public String getNbreplace(){
-        return nbreplace;
-    }
-    public void setNbreplace(String nbreplace){
-        this.nbreplace = nbreplace;
-    }
-
-            // Getter et Setter de compagnie_aerienne
-
-    public String getCompagnie_aerienne(){
-        return nom;
-    }
-    public void setCompagnie_aerienne(String nom){
-        this.nom = nom;
-    }
-
-    // Méthode pour établir une connexion à la base de données
-    private Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/Avion";
-        String user = "votre_utilisateur";
-        String password = "votre_mot_de_passe";
-        return DriverManager.getConnection(url, user, password);
-    }
-    
+    String sql = "INSERT INTO Avion (capacite, nom, modele) VALUES (?, ?, ?)";
+    // String modifier = "UPDATE Avion SET capacite = ?, nom = ?, modele = ? WHERE immatriculation = ?";
     // Méthode pour ajouter un avion dans la base de données
+<<<<<<< HEAD
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, capacite);
+=======
     public void ajouterAvion() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("INSERT INTO Avion (nbreplace, nom, modele) VALUES (?, ?, ?)")) {
@@ -65,40 +43,4 @@ public class Avion {
             e.printStackTrace();
         }
     }
-
-    // Méthode pour modifier un avion dans la base de données
-    public void modifierAvion(int immatriculation) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("UPDATE Avion SET nbreplace = ?, nom = ?, modele = ? WHERE immatriculation = ?")) {
-            statement.setString(1, nbreplace);
-            statement.setString(2, nom);
-            statement.setString(3, modele);
-            statement.setInt(4, immatriculation);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Avion modifié avec succès !");
-            } else {
-                System.out.println("Aucun avion trouvé avec l'immatriculation spécifiée.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Méthode pour supprimer un avion de la base de données
-    public void supprimerAvion(int immatriculation) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM Avion WHERE immatriculation = ?")) {
-            statement.setInt(1, immatriculation);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Avion supprimé avec succès !");
-            } else {
-                System.out.println("Aucun avion trouvé avec l'immatriculation spécifiée.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
