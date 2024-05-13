@@ -31,15 +31,15 @@ public class AeroportDAO {
     public void ajouterAeroport(Aeroport aeroport) {
         try {
             // Requête SQL d'insertion
-            String query = "INSERT INTO Aeroport (idVille, nomAeroport) VALUES (?, ?)";
+            String query = "INSERT INTO Aeroport (idAeroport, idVille, nomAeroport) VALUES (?, ?, ?)";
             
             // Crée un objet PreparedStatement avec la requête SQL
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             
             // Définit les valeurs des paramètres dans la requête SQL
-            // preparedStatement.setInt(1, aeroport.getIdAeroport());
-            preparedStatement.setInt(1, aeroport.getIdVille());
-            preparedStatement.setString(2, aeroport.getNomAeroport());
+            preparedStatement.setInt(1, aeroport.getIdAeroport());
+            preparedStatement.setInt(2, aeroport.getIdVille());
+            preparedStatement.setString(3, aeroport.getNomAeroport());
             
             // Exécute la requête SQL
             preparedStatement.executeUpdate();
