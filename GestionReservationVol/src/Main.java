@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		try{
 			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/gestionvol",
+					"jdbc:mysql://127.0.0.1:3306/reservation_vol",
 					"root",
 					""
 			);
