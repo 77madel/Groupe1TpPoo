@@ -37,7 +37,7 @@ public class Ville {
         System.out.print("Entrez le nom de la ville: ");
         String nom = scanner.nextLine();
 
-        String sql = "INSERT INTO villedb(nom) VALUES(?)";
+        String sql = "INSERT INTO ville(nom) VALUES(?)";
         Connexion connexion = new Connexion();
 
         try {
@@ -61,7 +61,7 @@ public class Ville {
         System.out.print("Entrez le nouveau nom de la ville: ");
         String nouveauNom = scanner.nextLine();
 
-        String sql = "UPDATE villedb SET nom = ? WHERE idVille = ?";
+        String sql = "UPDATE ville SET nom = ? WHERE idVille = ?";
         Connexion connexion = new Connexion();
 
         try {
@@ -81,7 +81,7 @@ public class Ville {
     }
 
     public static void afficherToutesLesVilles() {
-        String sql = "SELECT * FROM villedb";
+        String sql = "SELECT * FROM ville";
         Connexion connexion = new Connexion();
 
         try {
@@ -111,7 +111,7 @@ public class Ville {
 
             System.out.print("Votre choix: ");
             int choix = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
+            scanner.nextLine(); 
 
             switch (choix) {
                 case 1:

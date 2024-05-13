@@ -1,10 +1,12 @@
 package ville.info.java;
 
 public class Escale {
+	
+private Ville ville;
+private Vol vol;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+ public Escale() {
+	 
+ }
 
 }
