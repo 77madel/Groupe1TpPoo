@@ -14,7 +14,8 @@ public class Main {
 			);
 			Scanner scanner = new Scanner(System.in);
 			//Vol.ajouterVol(connection,scanner);
-			Categorie.ajouteCategorie(connection,scanner);
+			//Categorie.ajouteCategorie(connection,scanner);
+			Admin.ajouterCompagnie(connecter, scanner);
 		}catch (SQLException e){
 			e.printStackTrace();
 		}

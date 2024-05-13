@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectDB {
     
-    private static final String URL = "jdbc:mysql://localhost:3306/reservation_vol";
+    private static final String URL = "jdbc:mysql://localhost:3306/gestiondevolgroupe1";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
 
