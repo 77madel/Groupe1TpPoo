@@ -14,6 +14,7 @@ public class Main {
 					""
 			);
 			Scanner scanner = new Scanner(System.in);
+			//Vol.ajouterVol(connection,scanner);
 			Paiement.ajouterPaiement(connection,scanner);
 		}catch (SQLException e){
 			e.printStackTrace();
