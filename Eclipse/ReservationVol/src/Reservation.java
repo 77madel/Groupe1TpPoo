@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import connexion.Connexion;
-
 public class Reservation {
 		private int id_passager;
 		private String date_reservation;

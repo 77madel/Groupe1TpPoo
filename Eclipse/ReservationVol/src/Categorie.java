@@ -10,13 +10,24 @@ public class Categorie {
         System.out.println("Nom categorie : ");
         String nom = scanner.nextLine();
 
-        System.out.println("Vol id : ");
-        int vol_id = scanner.nextInt();
+       
+        // int vol_id  = 0;
+        // boolean isInt = false;
+        // do {
+        //     System.out.println("Vol id : ");
+        //     if (scanner.hasNextInt()) {
+        //         vol_id = scanner.nextInt();
+        //         isInt = true;
+        //     } else {
+        //         System.out.println("Veuillez saisir un entier.");
+        //         scanner.next(); // Pour vider le scanner et éviter une boucle infinie
+        //     }
+        // } while (!isInt);
 
-        String sql = "INSERT INTO categorie (nom, vol_id) VALUES (?, ?)";
+        String sql = "INSERT INTO categorie (nom) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,nom);
-            statement.setInt(2,vol_id);
+            // statement.setInt(2,vol_id);
 
             int lignesModifiees = statement.executeUpdate();
             if (lignesModifiees > 0) {
@@ -25,6 +36,73 @@ public class Categorie {
                 System.out.println("Erreur lors de l'ajout des données.");
             }
         }catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void modifierCategorie(Connection connection, Scanner scanner) {
+        System.out.println("Modification categorie : ");
+        
+        int idCategorie = 0;
+        boolean isInt = false;
+        do {
+            System.out.println("ID Categorie : ");
+            if (scanner.hasNextInt()) {
+                idCategorie = scanner.nextInt();
+                isInt = true;
+            } else {
+                System.out.println("Veuillez saisir un entier.");
+                scanner.next(); // Pour vider le scanner et éviter une boucle infinie
+            }
+        } while (!isInt);
+        
+        scanner.nextLine();
+
+        System.out.println("Nouveau categorie : ");
+        String nouveauNom = scanner.nextLine();
+
+        String sql = "UPDATE categorie SET nom = ? WHERE idCategorie = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nouveauNom);
+            statement.setInt(2, idCategorie);
+
+            int lignesModifiees = statement.executeUpdate();
+            if (lignesModifiees > 0) {
+                System.out.println("Le nom du categorie a été modifié avec succès !");
+            } else {
+                System.out.println("Erreur lors de la modification du nom du categorie.");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void supprimerCategorie(Connection connection, Scanner scanner) {
+        System.out.println("Suppression categorie : ");
+        int idCategorie = 0;
+        boolean isInt = false;
+        do {
+            System.out.println("ID categorie à supprimer : ");
+            if (scanner.hasNextInt()) {
+                idCategorie = scanner.nextInt();
+                isInt = true;
+            } else {
+                System.out.println("Veuillez saisir un entier.");
+                scanner.next(); // Pour vider le scanner et éviter une boucle infinie
+            }
+        } while (!isInt);
+
+        String sql = "DELETE FROM categorie WHERE idCategorie = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idCategorie);
+
+            int lignesModifiees = statement.executeUpdate();
+            if (lignesModifiees > 0) {
+                System.out.println("Categorie a été supprimé avec succès !");
+            } else {
+                System.out.println("Erreur lors de la suppression categorie.");
+            }
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }

@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -35,8 +36,9 @@ public class TestMain {
 		/* Ajout d'un Avion
 		Avion avion = new Avion();
 		avion.AjouterAvions(); */
-		
 		// Paiement de la reservation
-		Paiement.ajouterPaiement(Connexion.con, scanner);
+		// Paiement.ajouterPaiement(Connexion.con, scanner);
+		Vol.supprimerVol(Connexion.con, scanner);
+		//Categorie.supprimerCategorie(Connexion.con, scanner);
 	}
 }
