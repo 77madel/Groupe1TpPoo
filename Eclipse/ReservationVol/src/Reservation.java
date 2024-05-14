@@ -121,7 +121,7 @@ public class Reservation {
 			i.setIdVol(c.nextInt());
 			System.out.println("Choisissez la categorie de reservation :");
 			i.setIdCategorie(c.nextInt());
-			System.out.println("Saiisissez la nom : ");
+			System.out.println("Saisissez le nom : ");
 			i.setNomPassagerEtranger(c.next());
 			System.out.println("Saisissez le prenom : ");
 			i.setPrenomPassagerEtranger(c.next());
@@ -164,5 +164,23 @@ public class Reservation {
 		}
 	}
 	
+	
+	public void supprimerResevation() {
+		System.out.println("Entrez l'identifiant de la ligne à supprimer : ");
+		int id=c.nextInt();
+		String sq="DELETE  FROM infopassager where id=?";
+		Connexion.seConecter();
+		try {
+			PreparedStatement ps=Connexion.con.prepareStatement(sq);
+			ps.setInt(1, id);
+			ps.execute();
+			System.out.println("Suppression reussi !!!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		}
 
 }

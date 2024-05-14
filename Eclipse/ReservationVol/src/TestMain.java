@@ -12,7 +12,7 @@ public class TestMain {
 		/* Ajout de Ville */
 		// Ville.ajouterUneVille();
 		
-		 /*Nouveau Aeroport
+		/*Nouveau Aeroport
 		Aeroport airport = new Aeroport(3, "Senegal Plane Station");
 		AeroportDAO.ajouterAeroport(airport); */
 		

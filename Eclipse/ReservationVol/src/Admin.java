@@ -22,18 +22,17 @@ public class Admin extends Personne {
     }
 
 
-    /*public void ajouterCompagnie(CompagnieAerienne compagnie) throws SQLException {
-        String ajoutComp = "INSERT INTO Compagnie (nomCompagnie, nombreDAvion, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?, ?)";
+    public void ajouterCompagnie(CompagnieAerienne compagnie) throws SQLException {
+        String ajoutComp = "INSERT INTO Compagnie (nomCompagnie, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?)";
         try (Connection connection = Connexion.con;
             PreparedStatement statement = connection.prepareStatement(ajoutComp)) {
-            statement.setString(1, compagnie.getNom_comp());
-            statement.setInt(2, compagnie.getNbred_avion());
-            statement.setString(3, compagnie.getMdp());
+            statement.setString(1, compagnie.getNomCompagnie());
+            statement.setString(3, compagnie.getMotDePasse());
             statement.setString(4, compagnie.getSiteWeb());
             statement.setInt(5, this.getIdAdmin()); // Utilise l'ID de l'admin courant
             statement.executeUpdate();
         }
-    }*/
+    }
 
     public void supprimerCompagnie(int idCompagnie) throws SQLException {
         String supprComp = "DELETE FROM Compagnie WHERE idCompagnie = ?";
@@ -44,18 +43,17 @@ public class Admin extends Personne {
         }
     }
 
-    /*public void modifierCompagnie(CompagnieAerienne compagnie) throws SQLException {
-        String modifComp = "UPDATE Compagnie SET nomCompagnie = ?, nombreDAvion = ?, motDePasse = ?, siteWeb = ? WHERE idCompagnie = ?";
+    public void modifierCompagnie(CompagnieAerienne compagnie) throws SQLException {
+        String modifComp = "UPDATE Compagnie SET nomCompagnie = ?, motDePasse = ?, siteWeb = ? WHERE idCompagnie = ?";
         try (Connection connection = Connexion.con;
             PreparedStatement statement = connection.prepareStatement(modifComp)) {
             statement.setString(1, compagnie.getNomCompagnie());
-            statement.setInt(2, compagnie.getNbred_avion());
             statement.setString(3, compagnie.getMotDePasse());
             statement.setString(4, compagnie.getSiteWeb());
             statement.setInt(5, compagnie.getIdAdmin());
             statement.executeUpdate();
         }
-    }*/
+    }
 
     public boolean seConnecter(String email, String motDePasse) {
         String selectAdminQuery = "SELECT idPersonne FROM Personne WHERE email = ? AND motDePasse = ?";
