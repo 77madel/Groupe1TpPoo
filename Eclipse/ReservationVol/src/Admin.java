@@ -7,8 +7,8 @@ public class Admin extends Personne {
     private int idAdmin;
 
     // Constructeur
-    public Admin(int idPersonne, String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse, int idAdmin) {
-        super(idPersonne, nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse);
+    public Admin(String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse, int idAdmin) {
+        super(nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse);
         this.idAdmin = idAdmin;
     }
 

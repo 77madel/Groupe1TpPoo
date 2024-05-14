@@ -3,48 +3,101 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Passager extends Personne {
     private int idPassager;
 
     // Constructeur
-    public Passager(int idPersonne, String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse, int idPassager) {
-        super(idPersonne, nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse);
-        this.idPassager = idPassager;
+    public Passager(String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse) {
+        super(nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse);
     }
 
     // Getter et Setter spécifique à Passager
     public int getIdPassager() {
+        idPassager = -1;
+        try {
+            idPassager = getPassager(Connexion.con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return idPassager;
+        
     }
 
     public void setIdPassager(int idPassager) {
         this.idPassager = idPassager;
     }
+    private int getPassager(Connection connection) throws SQLException{
+         // Préparer la requête SQL
+         String sql = "SELECT idPersonne FROM Personne WHERE email='"+getEmail()+"'";
+         int idPersonne = 0;
+         try (Statement statement = connection.createStatement();
+              ResultSet resultSet = statement.executeQuery(sql)) {
+ 
+             // Vérifier si le ResultSet contient des données
+             if (resultSet.next()) {
+                 // Récupérer la valeur unique
+                 idPersonne = resultSet.getInt("idPersonne");
+ 
+                 // Utiliser la valeur récupérée
+                 // ... votre code ici pour utiliser la valeur 'nomUtilisateur'
+             } else {
+                 System.out.println("Aucune donnée trouvée.");
+             }
+         }
+         return idPersonne;
+    }
+    private static int recupererValeurUnique(Connection connection) throws SQLException {
+        // Préparer la requête SQL
+        String sql = "SELECT idPersonne FROM Personne ORDER BY idPersonne DESC LIMIT 1";
+		int idPersonne = 0;
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            // Vérifier si le ResultSet contient des données
+            if (resultSet.next()) {
+                // Récupérer la valeur unique
+                idPersonne = resultSet.getInt("idPersonne");
+
+                // Utiliser la valeur récupérée
+                // ... votre code ici pour utiliser la valeur 'nomUtilisateur'
+            } else {
+                System.out.println("Aucune donnée trouvée.");
+            }
+        }
+		return idPersonne;
+    }
 
     public void inscription() throws SQLException {
-        String insertionPersonneQuery = "INSERT INTO Personne (idPersonne, nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse) " +
-                                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String insertionPersonneQuery = "INSERT INTO Personne (nom, prenom, email, numeroDeTelephone, dateDeNaissance, motDePasse) " +
+                                        "VALUES (?, ?, ?, ?, ?, ?)";
         String insertionPassagerQuery = "INSERT INTO Passager (idPassager, idPersonne) VALUES (?, ?)";
 
-        try (Connection connection = Connexion.con;
-            PreparedStatement personneStatement = connection.prepareStatement(insertionPersonneQuery);
-            PreparedStatement passagerStatement = connection.prepareStatement(insertionPassagerQuery)) {
+        try (
+            PreparedStatement personneStatement = Connexion.con.prepareStatement(insertionPersonneQuery);
+            PreparedStatement passagerStatement = Connexion.con.prepareStatement(insertionPassagerQuery)) {
 
             // Insérer dans la table Personne
-            personneStatement.setInt(1, getIdPersonne());
-            personneStatement.setString(2, getNom());
-            personneStatement.setString(3, getPrenom());
-            personneStatement.setString(4, getEmail());
-            personneStatement.setString(5, getNumeroDeTelephone());
-            personneStatement.setString(6, getDateDeNaissance());
-            personneStatement.setString(7, getMotDePasse());
+            personneStatement.setString(1, getNom());
+            personneStatement.setString(2, getPrenom());
+            personneStatement.setString(3, getEmail());
+            personneStatement.setString(4, getNumeroDeTelephone());
+            personneStatement.setString(5, getDateDeNaissance());
+            personneStatement.setString(6, getMotDePasse());
 
             personneStatement.executeUpdate();
+            System.out.println(recupererValeurUnique(Connexion.con));
 
             // Insérer dans la table Passager
-            passagerStatement.setInt(1, getIdPassager());
-            passagerStatement.setInt(2, getIdPersonne());
+            try {
+                
+                passagerStatement.setInt(1, recupererValeurUnique(Connexion.con));
+                passagerStatement.setInt(2, recupererValeurUnique(Connexion.con));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
 
             passagerStatement.executeUpdate();
 

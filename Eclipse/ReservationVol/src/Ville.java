@@ -35,6 +35,13 @@ public class Ville {
         try (Scanner scanner = new Scanner(System.in)) {
 			System.out.print("Entrez le nom de la ville: ");
 			String nom = scanner.nextLine();
+            System.out.println("Liste de Pays: ");
+            try{
+                Pays.listeDePays(Connexion.con);
+            } catch(SQLException e){
+                e.printStackTrace();
+            }
+            
 			System.out.print("Entrez l'id du Pays: ");
 			String idPays = scanner.nextLine();
 
