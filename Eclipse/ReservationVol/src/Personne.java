@@ -1,7 +1,6 @@
 
 
 public abstract class Personne {
-    private int idPersonne;
     private String nom;
     private String prenom;
     private String email;
@@ -10,23 +9,13 @@ public abstract class Personne {
     private String motDePasse;
 
     // Constructeur
-    public Personne(int idPersonne, String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse) {
-        this.idPersonne = idPersonne;
+    public Personne(String nom, String prenom, String email, String numeroDeTelephone, String dateDeNaissance, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.numeroDeTelephone = numeroDeTelephone;
         this.dateDeNaissance = dateDeNaissance;
         this.motDePasse = motDePasse;
-    }
-
-    // Getters et Setters (Méthodes d'accès)
-    public int getIdPersonne() {
-        return idPersonne;
-    }
-
-    public void setIdPersonne(int idPersonne) {
-        this.idPersonne = idPersonne;
     }
 
     public String getNom() {

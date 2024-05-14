@@ -1,7 +1,10 @@
 
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Reservation {
@@ -9,8 +12,6 @@ public class Reservation {
 		private String date_reservation;
 		private int nbre_de_passager;
 
-	
-	Scanner c=new Scanner(System.in);
 
 	public int getId_passager() {
 		return id_passager;
@@ -37,42 +38,90 @@ public class Reservation {
 		this.nbre_de_passager = nbre_de_passager;
 	}
 
-	public void EffecuterReservation() {
+	public static void listeDeReservation(Connection connection) throws SQLException{
+        // Create a statement object
+        try (Statement statement = connection.createStatement();
+             // Create the SQL query to retrieve the entire column list
+             ResultSet resultSet = statement.executeQuery("SELECT idPays, nom FROM Pays")) {
+
+            // Iterate through the result set and print each value
+            while (resultSet.next()) {
+                String idPays = resultSet.getString("idPays");
+                String nomPays = resultSet.getString("nom");
+
+                System.out.print(idPays + "- ");
+                System.out.println(nomPays);
+            }
+        }
+    }
+	private static int recupererValeurUnique(Connection connection) throws SQLException {
+        // Préparer la requête SQL
+        String sql = "SELECT idReservation FROM Reservation ORDER BY idReservation DESC LIMIT 1";
+		int idReservation = 0;
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            // Vérifier si le ResultSet contient des données
+            if (resultSet.next()) {
+                // Récupérer la valeur unique
+                idReservation = resultSet.getInt("idReservation");
+                System.out.println("Id de la Reservation : " + idReservation);
+
+                // Utiliser la valeur récupérée
+                // ... votre code ici pour utiliser la valeur 'nomUtilisateur'
+            } else {
+                System.out.println("Aucune donnée trouvée.");
+            }
+        }
+		return idReservation;
+    }
+
+	public static void EffecuterReservation(Passager p, Scanner c) {
 		String sql="INSERT INTO reservation(idPassager,dateReservation,nombreDePassager) values(?,?,?)";
 		
+		
 		Reservation r=new Reservation();
-		System.out.println("renseignez les information concernant la reservation. \n Numero passager :");
-		r.setId_passager(c.nextInt());
+		
+		System.out.println("---- Informations concernant la reservation ----\n");
+		r.setId_passager(p.getIdPassager());
 		System.out.println("CHOISISEZ la date :");
 		r.setDate_reservation(c.next());
 		System.out.println("Vous voulez reserver pour combien de place ?");
 		r.setNbre_de_passager(c.nextInt());
 		int a=r.getNbre_de_passager();
-		if(a>0) {
-			try {
+		System.out.println("Reservation Effectuee");
+		try {
 				
-				Connexion.seConecter();
-				PreparedStatement ps=Connexion.con.prepareStatement(sql);
-				ps.setInt(1, r.getId_passager());ps.setString(2, r.getDate_reservation());
-				ps.setInt(3, r.getNbre_de_passager());ps.execute();
-				System.out.println("Reservation Effectuee Maintenant renseigner les infos des autre voyageurs \n :");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Connexion.seConecter();
+			PreparedStatement ps=Connexion.con.prepareStatement(sql);
+			ps.setInt(1, r.getId_passager());ps.setString(2, r.getDate_reservation());
+			ps.setInt(3, r.getNbre_de_passager());ps.execute();
 			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		
 		}
+		if(a>1) {
+			
+			System.out.println("Maintenant renseigner les infos des autre voyageurs :");
 			String rq="INSERT INTO infopassager(idReservation,idVol,idCategorie,nomPassagerEtranger,prenomPassagerEtranger,numeroPasseport) "
 					+ "values(?,?,?,?,?,?)";
 			for(int j=1;j<= a;j++) {
 			Infopassager i=new Infopassager();
 			System.out.println("Enregistrer la personne "+j +"\n");
-			System.out.println("Choisissez votre numero reservation :");
-			i.setIdReservation(c.nextInt());
+			try{
+				i.setIdReservation(Reservation.recupererValeurUnique(Connexion.con));
+			} catch (SQLException e){
+				e.printStackTrace();
+			}
+			
+			
 			System.out.println("Choisissez votre numero numero vol :");
 			i.setIdVol(c.nextInt());
 			System.out.println("Choisissez la categorie de reservation :");
 			i.setIdCategorie(c.nextInt());
-			System.out.println("Saiisissez la nom : ");
+			System.out.println("Saisissez le nom : ");
 			i.setNomPassagerEtranger(c.next());
 			System.out.println("Saisissez le prenom : ");
 			i.setPrenomPassagerEtranger(c.next());
@@ -93,7 +142,7 @@ public class Reservation {
 		}
 	}
 	
-	public void modifierReservation() {
+	public void modifierReservation(Scanner c) {
 		System.out.println("Renseigner le champ à modifier : ");
 		String champString=c.next();
 		System.out.println("Renseigner la modifier à effectuer : ");
@@ -116,7 +165,7 @@ public class Reservation {
 	}
 	
 	
-	public void supprimerResevation() {
+	public void supprimerResevation(Scanner c) {
 		System.out.println("Entrez l'identifiant de la ligne à supprimer : ");
 		int id=c.nextInt();
 		String sq="DELETE  FROM infopassager where id=?";

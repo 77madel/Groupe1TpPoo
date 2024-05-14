@@ -1,6 +1,8 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Pays {
@@ -69,6 +71,23 @@ public class Pays {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public static void listeDePays(Connection connection) throws SQLException{
+        // Create a statement object
+        try (Statement statement = connection.createStatement();
+             // Create the SQL query to retrieve the entire column list
+             ResultSet resultSet = statement.executeQuery("SELECT idPays, nom FROM Pays")) {
+
+            // Iterate through the result set and print each value
+            while (resultSet.next()) {
+                String idPays = resultSet.getString("idPays");
+                String nomPays = resultSet.getString("nom");
+
+                System.out.print(idPays + "- ");
+                System.out.println(nomPays);
+            }
         }
     }
 }

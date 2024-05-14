@@ -8,26 +8,25 @@ public class TestMain {
 		Connexion.seConecter();
 		
 		/* Ajout De pays */
-		// Pays.ajouterPays(Connexion.con, scanner);
+		//Pays.ajouterPays(Connexion.con, scanner);
 		
 		/* Ajout de Ville */
 		// Ville.ajouterUneVille();
 		
-		 /*Nouveau Aeroport
+		/*Nouveau Aeroport
 		Aeroport airport = new Aeroport(3, "Senegal Plane Station");
 		AeroportDAO.ajouterAeroport(airport); */
 		
 		// Creation des Nouvelles personnes
 		
-		/*Passager passager1 = new Passager(1, "Traore", "Fakoro", "fakoro88@gmail.com", "73375200", "2002-12-01","hello123", 1);
-		passager1.inscription(); */
+		Passager passager = new Passager("Thera", "Mohmed", "mriam@gmail.com", "03450423", "2012-02-01","uiJbvzv");
+		passager.inscription();
 		
 		// AJout d'un vol
 		// Vol.ajouterVol(Connexion.con, scanner);
 		
-		/* Reservation
-		 Reservation r = new Reservation();
-		 r.EffecuterReservation(); */
+		// Reservation
+		Reservation.EffecuterReservation(passager, scanner);
 		
 		/* Ajout D'une Compagnie
 		CompagnieAerienne comp = new CompagnieAerienne();
@@ -40,5 +39,6 @@ public class TestMain {
 		// Paiement.ajouterPaiement(Connexion.con, scanner);
 		Vol.supprimerVol(Connexion.con, scanner);
 		//Categorie.supprimerCategorie(Connexion.con, scanner);
+		// Paiement.ajouterPaiement(Connexion.con, scanner);
 	}
 }
