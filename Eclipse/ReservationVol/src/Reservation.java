@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import connexion.Connexion;
+
 public class Reservation {
 		private int id_passager;
 		private String date_reservation;
@@ -92,5 +94,28 @@ public class Reservation {
 		}
 		}
 	}
+	
+	public void modifierReservation() {
+		System.out.println("Renseigner le champ à modifier : ");
+		String champString=c.next();
+		System.out.println("Renseigner la modifier à effectuer : ");
+		String val=c.next();
+		System.out.println("Quel l'identifiant du champ à modifier : ");
+		int id=c.nextInt();
+		String sql="UPDATE infopassager SET "+champString+" = ? Where id = ?";
+		Connexion.seConecter();
+		
+		try {
+			PreparedStatement ps=Connexion.con.prepareStatement(sql);
+			ps.setString(1, val);
+			ps.setInt(2, id);
+			ps.execute();
+			System.out.println("Modification reusse !!! : ");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 }
