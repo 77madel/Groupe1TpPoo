@@ -165,7 +165,7 @@ public class Reservation {
 	}
 	
 	
-	public void supprimerResevation() {
+	public void supprimerResevation(Scanner c) {
 		System.out.println("Entrez l'identifiant de la ligne à supprimer : ");
 		int id=c.nextInt();
 		String sq="DELETE  FROM infopassager where id=?";
