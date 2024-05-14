@@ -74,7 +74,7 @@ public class Reservation {
 			i.setIdVol(c.nextInt());
 			System.out.println("Choisissez la categorie de reservation :");
 			i.setIdCategorie(c.nextInt());
-			System.out.println("Saiisissez la nom : ");
+			System.out.println("Saisissez le nom : ");
 			i.setNomPassagerEtranger(c.next());
 			System.out.println("Saisissez le prenom : ");
 			i.setPrenomPassagerEtranger(c.next());
