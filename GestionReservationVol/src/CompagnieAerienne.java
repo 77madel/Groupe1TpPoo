@@ -1,60 +1,29 @@
-package Groupe1TpPoo.GestionReservationVol.src;
-import java.util.ArrayList;
-import java.util.List;
-// importation des classes Vol et Avion
-public class CompagnieAerienne{
-    private int id_comp;
-    private String nom_comp;
-    private int nbred_avion;
-    private String mdp;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CompagnieAerienne {
+    private String nomCompagnie;
+    private String motDePasse;
     private String siteWeb;
-    private int admin_id; // Clé étrangère vers la table Admin
-    private List<Vol> vols; // Liste des vols de la compagnie
-    private List<Avion> avions; // Liste des avions de la compagnie
+    private int idAdmin;
 
-    // Constructeur
-    public CompagnieAerienne(int id_comp, String nom_comp, int nbred_avion, String mdp, String siteWeb, int admin_id) {
-        this.id_comp = id_comp;
-        this.nom_comp = nom_comp;
-        this.nbred_avion = nbred_avion;
-        this.mdp = mdp;
-        this.siteWeb = siteWeb;
-        this.admin_id = admin_id;
-        this.vols = new ArrayList<>(); // Initialisation de la liste des vols
-        this.avions = new ArrayList<>(); // Initialisation de la liste des avions
+    public String getNomCompagnie() {
+        return nomCompagnie;
     }
 
-    // Getters et setters
-    public int getId_comp() {
-        return id_comp;
+    public void setNomCompagnie(String nomCompagnie) {
+        this.nomCompagnie = nomCompagnie;
     }
 
-    public void setId_comp(int id_comp) {
-        this.id_comp = id_comp;
+    public String getMotDePasse() {
+        return motDePasse;
     }
 
-    public String getNom_comp() {
-        return nom_comp;
-    }
-
-    public void setNom_comp(String nom_comp) {
-        this.nom_comp = nom_comp;
-    }
-
-    public int getNbred_avion() {
-        return nbred_avion;
-    }
-
-    public void setNbred_avion(int nbred_avion) {
-        this.nbred_avion = nbred_avion;
-    }
-
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
     }
 
     public String getSiteWeb() {
@@ -65,40 +34,67 @@ public class CompagnieAerienne{
         this.siteWeb = siteWeb;
     }
 
-    public int getAdmin_id() {
-        return admin_id;
+    public int getIdAdmin() {
+        return idAdmin;
     }
 
-    public void setAdmin_id(int admin_id) {
-        this.admin_id = admin_id;
+    public void setIdAdmin(int idAdmin) {
+        this.idAdmin = idAdmin;
     }
 
-     // Méthodes pour gérer les vols
-     public void ajouterVol(Vol vol) {
-        vols.add(vol);
+    public static void main(String[] args) {
+        CompagnieAerienne c = new CompagnieAerienne();
+        c.AjouterCompagnie();
     }
 
-    public void supprimerVol(Vol vol) {
-        vols.remove(vol);
+    Scanner c = new Scanner(System.in);
+
+    public void AjouterCompagnie() {
+        System.out.println("Entrer le nom de la compagnie : ");
+        setNomCompagnie(c.next());
+
+        System.out.println("Saisissez le mot de passe : ");
+        setMotDePasse(c.next());
+
+        // Validation du site web
+        String site;
+        do {
+            System.out.println("Donnez votre site web : ");
+            site = c.next();
+            if (isValidURL(site)) {
+                setSiteWeb(site);
+            } else {
+                System.out.println("Erreur: Le site web n'est pas valide. Veuillez réessayer.");
+            }
+        } while (!isValidURL(site));
+
+        System.out.println("Entrez l'identifiant de l'Admin :");
+        setIdAdmin(c.nextInt());
+
+        String sql = "INSERT INTO compagnie(nomCompagnie, motDePasse, siteWeb, idAdmin) VALUES (?, ?, ?, ?)";
+        Connexion.seConecter();
+        try {
+            PreparedStatement ps = Connexion.con.prepareStatement(sql);
+            ps.setString(1, getNomCompagnie());
+            ps.setString(2, getMotDePasse());
+            ps.setString(3, getSiteWeb());
+            ps.setInt(4, getIdAdmin());
+            ps.execute();
+            System.out.println("Enregistrement effectué !!!!!");
+            System.out.println("Les données sont : " + getNomCompagnie() + " " + getMotDePasse() + " " + getSiteWeb() + " " + getIdAdmin());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void modifierVol(Vol vol, String nouveauDepart, String nouvelleDestination, String nouvelleDate) {
-        vol.setDepart(nouveauDepart);
-        vol.setDestination(nouvelleDestination);
-        vol.setDate(nouvelleDate);
-    }
-
-    // Méthodes pour gérer les avions
-    public void ajouterAvion(Avion avion) {
-        avions.add(avion);
-    }
-
-    public void supprimerAvion(Avion avion) {
-        avions.remove(avion);
-    }
-
-    public void modifierAvion(Avion avion, String nouveauModele, int nouvelleCapacite) {
-        avion.setModele(nouveauModele);
-        avion.setCapacite(nouvelleCapacite);
+    // Méthode pour vérifier si l'URL est valide
+    public static boolean isValidURL(String url) {
+        String urlRegex = "^(http://www\\.|https://www\\.|http://|https://)?[a-zA-Z0-9][-a-zA-Z0-9]+(\\.[a-zA-Z]{2,7})+(:\\d{1,5})?(/.*)?$";
+        Pattern pattern = Pattern.compile(urlRegex);
+        if (url == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(url);
+        return matcher.matches();
     }
 }
