@@ -1,4 +1,3 @@
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -19,11 +18,11 @@ public class TestMain {
 		
 		// Creation des Nouvelles personnes
 		
-		Passager passager = new Passager("Thera", "Mohmed", "mriam@gmail.com", "03450423", "2012-02-01","uiJbvzv");
+		Passager passager = new Passager("Jack", "Jack", "douyon@gmail.com", "03450423", "2012-02-01","uiJbvzv");
 		passager.inscription();
 		
-		// AJout d'un vol
-		// Vol.ajouterVol(Connexion.con, scanner);
+
+		//Vol.volDispoAUneDate(Connexion.con, "2024-05-24", 6);
 		
 		// Reservation
 		Reservation.EffecuterReservation(passager, scanner);
@@ -37,7 +36,7 @@ public class TestMain {
 		avion.AjouterAvions(); */
 		// Paiement de la reservation
 		// Paiement.ajouterPaiement(Connexion.con, scanner);
-		Vol.supprimerVol(Connexion.con, scanner);
+		//Vol.supprimerVol(Connexion.con, scanner);
 		//Categorie.supprimerCategorie(Connexion.con, scanner);
 		// Paiement.ajouterPaiement(Connexion.con, scanner);
 	}

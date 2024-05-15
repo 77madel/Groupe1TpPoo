@@ -1,14 +1,40 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Categorie {
+
+
+    public static void listeDeCategorie(Connection connection) throws SQLException{
+        System.out.print("\n");
+        // Create a statement object
+        try (Statement statement = connection.createStatement();
+             // Create the SQL query to retrieve the entire column list
+             ResultSet resultSet = statement.executeQuery("SELECT idCategorie, nom FROM Categorie")) {
+
+            // Iterate through the result set and print each value
+            while (resultSet.next()) {
+                System.out.print("  ");
+                String idCategorie = resultSet.getString("idCategorie");
+                String nom = resultSet.getString("nom");
+
+                System.out.print(idCategorie + "- ");
+                System.out.println(nom);
+            }
+        }
+        System.out.println("\n");
+    }
+
     public static void ajouteCategorie(Connection connection, Scanner scanner){
         System.out.println("Les informations sur les categories : ");
 
         System.out.println("Nom categorie : ");
         String nom = scanner.nextLine();
+
+        
 
        
         // int vol_id  = 0;
@@ -39,6 +65,8 @@ public class Categorie {
             throwables.printStackTrace();
         }
     }
+
+    
 
     public static void modifierCategorie(Connection connection, Scanner scanner) {
         System.out.println("Modification categorie : ");

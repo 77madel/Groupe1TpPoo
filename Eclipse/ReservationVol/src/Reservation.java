@@ -39,6 +39,7 @@ public class Reservation {
 	}
 
 	public static void listeDeReservation(Connection connection) throws SQLException{
+		System.out.println("\n");
         // Create a statement object
         try (Statement statement = connection.createStatement();
              // Create the SQL query to retrieve the entire column list
@@ -53,6 +54,7 @@ public class Reservation {
                 System.out.println(nomPays);
             }
         }
+		System.out.println("\n\n");
     }
 	private static int recupererValeurUnique(Connection connection) throws SQLException {
         // Préparer la requête SQL
@@ -84,61 +86,102 @@ public class Reservation {
 		
 		System.out.println("---- Informations concernant la reservation ----\n");
 		r.setId_passager(p.getIdPassager());
-		System.out.println("CHOISISEZ la date :");
+		System.out.print("CHOISISEZ la ville Depart : ");
+		String villeDeDepart = c.nextLine();
+		System.out.print("CHOISISEZ la ville D'arrive : ");
+		String villeDArrive = c.nextLine();
+		System.out.print("CHOISISEZ la date : ");
 		r.setDate_reservation(c.next());
-		System.out.println("Vous voulez reserver pour combien de place ?");
+		System.out.print("Vous voulez reserver pour combien de place ? ");
 		r.setNbre_de_passager(c.nextInt());
 		int a=r.getNbre_de_passager();
-		System.out.println("Reservation Effectuee");
-		try {
-				
-			Connexion.seConecter();
-			PreparedStatement ps=Connexion.con.prepareStatement(sql);
-			ps.setInt(1, r.getId_passager());ps.setString(2, r.getDate_reservation());
-			ps.setInt(3, r.getNbre_de_passager());ps.execute();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		
+		System.out.println("\nVol disponible à cette date:");
+		try {
+			Vol.volDispoAUneDate(Connexion.con, r.date_reservation, r.getNbre_de_passager(), villeDeDepart, villeDArrive);
+		} catch (SQLException e) {
+			System.out.println(e.getStackTrace());
 		}
-		if(a>1) {
-			
-			System.out.println("Maintenant renseigner les infos des autre voyageurs :");
-			String rq="INSERT INTO infopassager(idReservation,idVol,idCategorie,nomPassagerEtranger,prenomPassagerEtranger,numeroPasseport) "
-					+ "values(?,?,?,?,?,?)";
-			for(int j=1;j<= a;j++) {
-			Infopassager i=new Infopassager();
-			System.out.println("Enregistrer la personne "+j +"\n");
-			try{
-				i.setIdReservation(Reservation.recupererValeurUnique(Connexion.con));
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-			
-			
-			System.out.println("Choisissez votre numero numero vol :");
-			i.setIdVol(c.nextInt());
-			System.out.println("Choisissez la categorie de reservation :");
-			i.setIdCategorie(c.nextInt());
-			System.out.println("Saisissez le nom : ");
-			i.setNomPassagerEtranger(c.next());
-			System.out.println("Saisissez le prenom : ");
-			i.setPrenomPassagerEtranger(c.next());
-			System.out.println("Entrer le numero du passe-port : ");
-			i.setNumeroPasseport(c.next());
+
+		System.out.print("\nChoisissez l'immatriculation de l'avion : ");
+		String idAvion = c.next();
+
+		
+		int canReserv = Avion.updateAvionCapacite(Connexion.con, a, idAvion);
+		if (canReserv!=-1) {
+			System.out.println("!!! Reservation Effectuee !!!\n\n");
+
 			try {
-				Connexion.seConecter();
-				PreparedStatement ps=Connexion.con.prepareStatement(rq);
-				ps.setInt(1, i.getIdReservation());ps.setInt(2, i.getIdVol());ps.setInt(3, i.getIdCategorie());
-				ps.setString(4, i.getNomPassagerEtranger());ps.setString(5, i.getPrenomPassagerEtranger());
-				ps.setString(6, i.getNumeroPasseport());
-				ps.execute();
+					
+				PreparedStatement ps=Connexion.con.prepareStatement(sql);
+				ps.setInt(1, r.getId_passager());ps.setString(2, r.getDate_reservation());
+				ps.setInt(3, r.getNbre_de_passager());ps.execute();
+				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			
 			}
-		}
+			if(a>0) {
+				
+				System.out.println("Maintenant renseigner les infos des voyageurs :");
+				String rq="INSERT INTO infopassager(idReservation,idVol,idCategorie,nomPassagerEtranger,prenomPassagerEtranger,numeroPasseport) "
+						+ "values(?,?,?,?,?,?)";
+
+			
+				for(int j=1;j<= a;j++) {
+					Infopassager i=new Infopassager();
+					try{
+						i.setIdReservation(Reservation.recupererValeurUnique(Connexion.con));
+					} catch (SQLException e){
+						e.printStackTrace();
+					}
+					System.out.println("!!! Enregistrer la personne "+j +" !!!");
+					
+					
+					System.out.println("Liste Des Vols: \n");
+					try {
+						Vol.volDispoAUneDate(Connexion.con, r.date_reservation, r.getNbre_de_passager(), villeDeDepart, villeDArrive);
+					} catch (SQLException e) {
+						System.out.println(e.getStackTrace());
+					}
+					System.out.print("Entrer son numero de vol : ");
+					i.setIdVol(c.nextInt());
+
+					System.out.println("\nListe des Categories:");
+					try {
+						Categorie.listeDeCategorie(Connexion.con);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					System.out.print("Choisissez la categorie de sa reservation : ");
+					i.setIdCategorie(c.nextInt());
+					System.out.print("Saisissez son nom : ");
+					i.setNomPassagerEtranger(c.next());
+					System.out.print("Saisissez son prenom : ");
+					i.setPrenomPassagerEtranger(c.next());
+					System.out.print("son numero du passe-port : ");
+					i.setNumeroPasseport(c.next());
+					try {
+						PreparedStatement ps=Connexion.con.prepareStatement(rq);
+						ps.setInt(1, i.getIdReservation());ps.setInt(2, i.getIdVol());ps.setInt(3, i.getIdCategorie());
+						ps.setString(4, i.getNomPassagerEtranger());ps.setString(5, i.getPrenomPassagerEtranger());
+						ps.setString(6, i.getNumeroPasseport());
+						ps.execute();
+
+						System.out.println("\n\n  ??? Veillez Effectuer Le paiement ....");
+						try{
+							i.setIdReservation(Reservation.recupererValeurUnique(Connexion.con));
+						} catch (SQLException e){
+							e.printStackTrace();
+						}
+						Paiement.ajouterPaiement(Connexion.con, c);
+						
+						System.out.println("\n--- Reservation Terminé avec Succès --- \n");
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 	
@@ -157,9 +200,8 @@ public class Reservation {
 			ps.setString(1, val);
 			ps.setInt(2, id);
 			ps.execute();
-			System.out.println("Modification reusse !!! : ");
+			System.out.println("Modification reussie !!! : ");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -176,7 +218,6 @@ public class Reservation {
 			ps.execute();
 			System.out.println("Suppression reussi !!!");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

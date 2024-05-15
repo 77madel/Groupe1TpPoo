@@ -75,6 +75,7 @@ public class Pays {
     }
 
     public static void listeDePays(Connection connection) throws SQLException{
+        System.out.println("\n");
         // Create a statement object
         try (Statement statement = connection.createStatement();
              // Create the SQL query to retrieve the entire column list
@@ -89,5 +90,6 @@ public class Pays {
                 System.out.println(nomPays);
             }
         }
+        System.out.println("\n\n");
     }
 }

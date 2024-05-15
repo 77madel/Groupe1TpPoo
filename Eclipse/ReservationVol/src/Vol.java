@@ -1,24 +1,59 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Vol {
+
+    public static void volDispoAUneDate(Connection connection, String date, int nbreDePlace, String villeDeDepar, String villeDArriv) throws SQLException{
+        
+        // Create a statement object
+        try (Statement statement = connection.createStatement();
+             // Create the SQL query to retrieve the entire column list
+             ResultSet resultSet = statement.executeQuery("SELECT idVol, villeDeDepart, villeDArrive, dateDeDepart, nombreDEscale, modele, tarif, capacite, immatriculation FROM Vol NATURAL JOIN Avion WHERE dateDeDepart='"+date+"' AND capacite>="+nbreDePlace+" AND villeDeDepart='"+villeDeDepar+"' AND villeDArrive='"+villeDArriv+"'")) {
+
+            // Iterate through the result set and print each value
+            
+            
+
+            while (resultSet.next()) {
+                
+                int idVol = resultSet.getInt("idVol");
+                String villeDeDepart = resultSet.getString("villeDeDepart");
+                String villeDArrive = resultSet.getString("villeDArrive");
+                String dateDeDepart = resultSet.getString("dateDeDepart");
+                int nombreDEscale = resultSet.getInt("nombreDEscale");
+                int tarif = resultSet.getInt("tarif");
+                String immatriculation = resultSet.getString("immatriculation");
+                
+                System.out.print("	");
+                System.out.print("matricule: "+immatriculation + "  ");
+                System.out.print("numeroVol: "+idVol + "  ");
+                System.out.print(villeDeDepart + "-");
+                System.out.print(villeDArrive + "  ");
+                System.out.print(dateDeDepart + " ");
+                System.out.print("nbreEscale:"+nombreDEscale + " ");
+                System.out.println("tarif:"+tarif+"euros");
+            }
+        }
+    }
 
     public static void ajouterVol(Connection connection, Scanner scanner){
         System.out.println("Veuillez saisir les informations de vol :");
 
         System.out.print("Ville de départ : ");
-        String villeDepart = scanner.nextLine();
+        String villeDepart = scanner.next();
 
         System.out.print("Ville d'arrivée : ");
-        String villeArrivee = scanner.nextLine();
+        String villeArrivee = scanner.next();
 
         System.out.print("Date de départ (au format YYYY-MM-DD) : ");
-        String dateDepart = scanner.nextLine();
+        String dateDepart = scanner.next();
 
         System.out.print("Date d'arrivée (au format YYYY-MM-DD) : ");
-        String dateArrivee = scanner.nextLine();
+        String dateArrivee = scanner.next();
 
         int nbr_de_escale = 0;
         boolean isInt = false;
@@ -35,15 +70,26 @@ public class Vol {
 
         System.out.print("Tarif : ");
         int tarif = scanner.nextInt();
+        System.out.println("Liste des Avions:");
+        try {
+            Avion.listeDAvion(Connexion.con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.print("choisissez l'id de L'avion : ");
+        String idAvion = scanner.next();
+        
+        
 
-        String sql = "INSERT INTO vol (villeDeDepart, villeDArrive, dateDeDepart, dateDArrive, nombreDEscale, tarif ) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vol (immatriculation, villeDeDepart, villeDArrive, dateDeDepart, dateDArrive, nombreDEscale, tarif ) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, villeDepart);
-            statement.setString(2, villeArrivee);
-            statement.setString(3, dateDepart);
-            statement.setString(4, dateArrivee);
-            statement.setInt(5, nbr_de_escale);
-            statement.setInt(6, tarif);
+            statement.setString(1, idAvion);
+            statement.setString(2, villeDepart);
+            statement.setString(3, villeArrivee);
+            statement.setString(4, dateDepart);
+            statement.setString(5, dateArrivee);
+            statement.setInt(6, nbr_de_escale);
+            statement.setInt(7, tarif);
 
             // Exécutez la requête
             int lignesModifiees = statement.executeUpdate();
